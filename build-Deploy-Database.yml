@@ -9,7 +9,6 @@ trigger: none
 
 variables:
    AdoEnvironment: 'test-ado'
-#- template: ..\Variables\Variables-Global.yml
 
 pool: 'Azure Pipelines'
 
@@ -18,8 +17,6 @@ stages:
 - stage: Stage_${{ parameters.Environment }} 
   displayName: Stage - ${{ parameters.Environment }}
   dependsOn: []
-  variables:
-    - template: ..\Variables\Variables-Global.yml
 
   jobs:  
   - deployment: JobDataBuild
