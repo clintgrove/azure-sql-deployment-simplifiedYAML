@@ -1,5 +1,12 @@
-#
+name: Pipeline-$(Build.DefinitionName)-$(Date:yyyyMMdd)$(Rev:.r)
 
+pr: none
+trigger: none
+
+#variables:
+#- template: ..\Variables\Variables-Global.yml
+
+pool: 'Azure Pipelines'
 
 
 stages:
