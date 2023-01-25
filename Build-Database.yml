@@ -1,3 +1,6 @@
+parameters:
+ - name:  Environment
+
 jobs:  
   - deployment: JobDataBuild
     pool:

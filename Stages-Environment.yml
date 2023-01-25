@@ -26,5 +26,9 @@ stages:
   jobs:
 
   - template: .\Build-Database.yml
+    parameters: 
+     Environment: parameters.Environment
 
   - template: .\Deploy-Database.yml
+    parameters: 
+     Environment: parameters.Environment
