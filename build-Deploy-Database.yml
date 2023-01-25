@@ -43,7 +43,7 @@ stages:
           - task: CopyFiles@2
             displayName: 'Copy Files to:  $(Build.ArtifactStagingDirectory)'
             inputs:
-              SourceFolder: '${{ parameters.SQLBuildSourceFolder }}/bin/release'
+              SourceFolder: '/DatabaseForSimpliedYaml/DatabaseExample/bin/release'
               Contents: '**.dacpac'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
@@ -51,4 +51,4 @@ stages:
             displayName: 'Publish Pipeline Artifact'
             inputs:
               targetPath: '$(Build.ArtifactStagingDirectory)'
-              artifact: ${{ parameters.ArtifactName }}
+              artifact: 'dacpac-built'
