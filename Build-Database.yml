@@ -1,0 +1,71 @@
+parameters:
+ - name: Environment
+   default: 'Test' 
+   values:
+   - Test
+   - UAT
+   - Prod
+
+
+name: Pipeline-$(Build.DefinitionName)-$(Date:yyyyMMdd)$(Rev:.r)
+
+pr: none
+trigger: none
+
+variables:
+   AdoEnvironment: 'test-ado'
+
+pool: 'Azure Pipelines'
+
+
+stages:
+- stage: Stage_${{ parameters.Environment }} 
+  displayName: Stage - ${{ parameters.Environment }}
+  dependsOn: []
+
+  jobs:  
+  - deployment: JobDataBuild
+    pool:
+      vmImage: 'windows-latest'
+    displayName: Job - Data Build
+    dependsOn: []
+    variables:
+      - group: ${{ Parameters.Environment }}-vars
+      - template: .\Variables-${{ Parameters.Environment }}.yml
+
+    environment: ${{ variables.AdoEnvironment }}
+    strategy:
+      runOnce:
+        preDeploy:
+         steps: 
+          - download: current
+            artifact: dacpac-built
+        deploy:
+          steps:
+          - checkout: self
+
+          - task: VSBuild@1
+            displayName: 'Visual Studio Build sln file '
+            inputs:
+              vsVersion: 17.0
+              #solution: DatabaseForSimpliedYaml/DatabaseForSimpliedYaml.sln
+              msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\\"'
+              platform: 'any cpu'
+              configuration: release
+
+          - task: CopyFiles@2
+            displayName: 'Copy Files to:  $(Build.ArtifactStagingDirectory)'
+            inputs:
+              SourceFolder: 'DatabaseForSimpliedYaml/DatabaseExample/bin/release'
+              Contents: '**.dacpac'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish Pipeline Artifact'
+            inputs:
+              targetPath: '$(Build.ArtifactStagingDirectory)'
+              artifact: 'dacpac-built'
+
+          - template: ./Deploy-Database.yml
+            parameters:
+              Environment: ${{ Parameters.Environment }}
