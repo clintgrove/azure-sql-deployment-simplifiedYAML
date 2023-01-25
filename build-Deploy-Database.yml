@@ -1,9 +1,14 @@
+parameters:
+ - name: Environment
+   default: 'test' 
+
 name: Pipeline-$(Build.DefinitionName)-$(Date:yyyyMMdd)$(Rev:.r)
 
 pr: none
 trigger: none
 
-#variables:
+variables:
+   AdoEnvironment: 'test-ado'
 #- template: ..\Variables\Variables-Global.yml
 
 pool: 'Azure Pipelines'
