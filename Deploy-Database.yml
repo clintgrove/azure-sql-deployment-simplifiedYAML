@@ -1,16 +1,11 @@
 parameters:
  - name:  Environment
 
-stages:
-- stage: Stage_${{ parameters.Environment }} 
-  displayName: Stage - ${{ parameters.Environment }}
-  dependsOn: []
-
-  jobs:  
+jobs:  
   - deployment: JobDataServiceDeploy
     pool:
       vmImage: 'windows-latest'
-    displayName: Job - Data Build
+    displayName: Job - Database Deploy
     dependsOn: []
     variables:
       - group: ${{ Parameters.Environment }}-vars
