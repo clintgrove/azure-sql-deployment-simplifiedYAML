@@ -1,19 +1,18 @@
 parameters:
  - name:  Environment
 
-jobs:  
-  - deployment: JobDataServiceDeploy
-    pool:
+ - deployment: JobDataServiceDeploy
+   pool:
       vmImage: 'windows-latest'
-    displayName: Job - Database Deploy
-    dependsOn: []
-    variables:
+      displayName: Job - Database Deploy
+      dependsOn: []
+      variables:
       - group: ${{ Parameters.Environment }}-vars
       - template: .\Variables-${{ Parameters.Environment }}.yml
 
-    environment: ${{ variables.AdoEnvironment }}
-    strategy:
-      runOnce:
+      environment: ${{ variables.AdoEnvironment }}
+      strategy:
+       runOnce:
         preDeploy:
          steps: 
           - download: current
