@@ -71,7 +71,7 @@ stages:
         
 
           - task: 'SqlAzureDacpacDeployment@1'
-            displayName: 'Deploy SQL Database - ${{ parameters.DatabaseName }}'
+            displayName: 'Deploy SQL Database - ${{ variables.DatabaseName }}'
             inputs:
               azureSubscription: ${{ variables.ServiceConnection }}
               ServerName: ${{variables.ServerName}}
