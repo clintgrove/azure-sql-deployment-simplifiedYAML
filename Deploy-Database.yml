@@ -30,7 +30,8 @@ jobs:
           #       $sqlToken = [Microsoft.Azure.Commands.Common.Authentication.AzureSession]::Instance.AuthenticationFactory.Authenticate($context.Account, $context.Environment, $context.Tenant.Id.ToString(), $null, [Microsoft.Azure.Commands.Common.Authentication.ShowDialog]::Never, $null, "https://database.windows.net").AccessToken
           #       Write-Host ("##vso[task.setvariable variable=SQLTOKEN;]$sqlToken")  
           #     errorActionPreference: Continue
-
+        deploy:
+         steps:
           - task: 'SqlAzureDacpacDeployment@1'
             displayName: 'Deploy SQL Database - ${{ variables.DatabaseName }}'
             inputs:
