@@ -70,13 +70,16 @@ stages:
           #     errorActionPreference: Continue
         
 
+          - downlaod: current
+            artifact: dacpac-built
+            
           - task: 'SqlAzureDacpacDeployment@1'
             displayName: 'Deploy SQL Database - ${{ variables.DatabaseName }}'
             inputs:
               azureSubscription: ${{ variables.ServiceConnection }}
               ServerName: ${{variables.ServerName}}
               DatabaseName: ${{ variables.DatabaseName }}
-              SqlUsername: 'sqladmin'
+              SqlUsername: 'clintgrove'
               SqlPassword: $(SqlPassword)
               #AuthenticationType: 'connectionString'
               #ConnectionString: 'Data Source=${{ parameters.ServerName }};Initial Catalog=${{ parameters.DatabaseName }};Encrypt=true;Connect Timeout=300'
