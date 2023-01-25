@@ -38,7 +38,7 @@ jobs:
               azureSubscription: ${{ variables.ServiceConnection }}
               ServerName: ${{variables.ServerName}}
               DatabaseName: ${{ variables.DatabaseName }}
-              SqlUsername: 'clintgrove'
+              SqlUsername: $(SqlUser-gh-simplifiedyaml)
               SqlPassword: $(SqlPassword-gh-simplifiedyaml)
               #AuthenticationType: 'connectionString'
               #ConnectionString: 'Data Source=${{ parameters.ServerName }};Initial Catalog=${{ parameters.DatabaseName }};Encrypt=true;Connect Timeout=300'
