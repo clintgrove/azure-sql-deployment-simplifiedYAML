@@ -39,7 +39,7 @@ jobs:
               ServerName: ${{variables.ServerName}}
               DatabaseName: ${{ variables.DatabaseName }}
               SqlUsername: 'clintgrove'
-              SqlPassword: $(SqlPassword)
+              SqlPassword: $(SqlPassword-gh-simplifiedyaml)
               #AuthenticationType: 'connectionString'
               #ConnectionString: 'Data Source=${{ parameters.ServerName }};Initial Catalog=${{ parameters.DatabaseName }};Encrypt=true;Connect Timeout=300'
               deployType: 'DacpacTask'
