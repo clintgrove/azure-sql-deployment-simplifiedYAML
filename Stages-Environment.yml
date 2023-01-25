@@ -3,7 +3,7 @@ parameters:
    default: 'Test' 
    values:
    - Test
-   - UAT
+   - Ppe
    - Prod
 
 
@@ -11,9 +11,6 @@ name: Pipeline-$(Build.DefinitionName)-$(Date:yyyyMMdd)$(Rev:.r)
 
 pr: none
 trigger: none
-
-variables:
-   AdoEnvironment: '${{ parameters.Environment }}-ado'
 
 pool: 'Azure Pipelines'
 

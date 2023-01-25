@@ -1,7 +1,7 @@
 variables:
   ServiceConnection: 'clintazrealallrgs'
   Environment: 'Test' 
-  AdoEnvironment: 'test-ado'
+  AdoEnvironment: 'test-data'
   DatabaseName: 'db01'
   ServerName: 'sql-gh-simplified-yaml-01.database.windows.net'
  # tenantid 89397abe-df61-48a3-abe3-efc403bca4bd
