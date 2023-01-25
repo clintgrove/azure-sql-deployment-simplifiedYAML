@@ -8,28 +8,41 @@ stages:
   dependsOn: []
   variables:
     - template: ..\Variables\Variables-Global.yml
+
   jobs:  
+  - deployment: JobDataBuild
+    pool:
+      vmImage: 'windows-latest'
+    displayName: Job - Data Build
+    dependsOn: JobDataInfrastructure
+    variables:
+      - template: ..\Variables\Variables-Global.yml
+      - template: ..\Variables\Variables-${{ Parameters.Environment }}.yml
+      - group: ${{ Parameters.Environment }}-vars
+    environment: ${{ variables.AdoEnvironment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
 
+          - task: VSBuild@1
+            displayName: 'Visual Studio Build sln file '
+            inputs:
+              vsVersion: 17.0
+              msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+              platform: 'any cpu'
+              configuration: release
 
-  steps:
+          - task: CopyFiles@2
+            displayName: 'Copy Files to:  $(Build.ArtifactStagingDirectory)'
+            inputs:
+              SourceFolder: '${{ parameters.SQLBuildSourceFolder }}/bin/release'
+              Contents: '**.dacpac'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-      - task: VSBuild@1
-        displayName: 'Visual Studio Build sln file '
-        inputs:
-          vsVersion: 17.0
-          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
-          platform: 'any cpu'
-          configuration: release
-
-      - task: CopyFiles@2
-        displayName: 'Copy Files to:  $(Build.ArtifactStagingDirectory)'
-        inputs:
-          SourceFolder: '${{ parameters.SQLBuildSourceFolder }}/bin/release'
-          Contents: '**.dacpac'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-      - task: PublishPipelineArtifact@1
-        displayName: 'Publish Pipeline Artifact'
-        inputs:
-          targetPath: '$(Build.ArtifactStagingDirectory)'
-          artifact: ${{ parameters.ArtifactName }}
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish Pipeline Artifact'
+            inputs:
+              targetPath: '$(Build.ArtifactStagingDirectory)'
+              artifact: ${{ parameters.ArtifactName }}
