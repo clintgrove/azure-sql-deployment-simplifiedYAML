@@ -2,10 +2,10 @@ parameters:
  - name:  Environment
 
 jobs:  
-  - deployment: JobDataBuild
+  - deployment: JobDataBaseBuild
     pool:
       vmImage: 'windows-latest'
-    displayName: Job - Data Build
+    displayName: Job - Database Build
     dependsOn: []
     variables:
       - group: ${{ Parameters.Environment }}-vars

@@ -2,11 +2,11 @@ parameters:
  - name:  Environment
 
 jobs:  
-  - deployment: JobDataServiceDeploy
+  - deployment: JobDataBaseDeploy
     pool:
       vmImage: 'windows-latest'
     displayName: Job - Database Deploy
-    dependsOn: []
+    dependsOn: [JobDataBaseBuild]
     variables:
       - group: ${{ Parameters.Environment }}-vars
       - template: .\Variables-${{ Parameters.Environment }}.yml
