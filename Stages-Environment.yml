@@ -1,0 +1,10 @@
+stages:
+- stage: Stage_${{ parameters.Environment }} 
+  displayName: Stage - ${{ parameters.Environment }}
+  dependsOn: []
+
+  jobs:
+
+  - template: .\Build-Database.yml
+
+  - template: .\Deploy-Database.yml

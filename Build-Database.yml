@@ -18,12 +18,7 @@ variables:
 pool: 'Azure Pipelines'
 
 
-stages:
-- stage: Stage_${{ parameters.Environment }} 
-  displayName: Stage - ${{ parameters.Environment }}
-  dependsOn: []
-
-  jobs:  
+jobs:  
   - deployment: JobDataBuild
     pool:
       vmImage: 'windows-latest'
@@ -66,6 +61,3 @@ stages:
               targetPath: '$(Build.ArtifactStagingDirectory)'
               artifact: 'dacpac-built'
 
-          - template: ./Deploy-Database.yml
-            parameters:
-              Environment: ${{ Parameters.Environment }}
