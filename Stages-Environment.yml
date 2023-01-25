@@ -1,3 +1,23 @@
+parameters:
+ - name: Environment
+   default: 'Test' 
+   values:
+   - Test
+   - UAT
+   - Prod
+
+
+name: Pipeline-$(Build.DefinitionName)-$(Date:yyyyMMdd)$(Rev:.r)
+
+pr: none
+trigger: none
+
+variables:
+   AdoEnvironment: 'test-ado'
+
+pool: 'Azure Pipelines'
+
+
 stages:
 - stage: Stage_${{ parameters.Environment }} 
   displayName: Stage - ${{ parameters.Environment }}
