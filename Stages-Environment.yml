@@ -27,8 +27,8 @@ stages:
 
   - template: .\Build-Database.yml
     parameters: 
-     Environment: parameters.Environment
+     Environment: ${{ parameters.Environment }} 
 
   - template: .\Deploy-Database.yml
     parameters: 
-     Environment: parameters.Environment
+     Environment: ${{ parameters.Environment }} 
