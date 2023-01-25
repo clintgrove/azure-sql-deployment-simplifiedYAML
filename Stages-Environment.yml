@@ -13,7 +13,7 @@ pr: none
 trigger: none
 
 variables:
-   AdoEnvironment: 'test-ado'
+   AdoEnvironment: '${{ parameters.Environment }}-ado'
 
 pool: 'Azure Pipelines'
 
