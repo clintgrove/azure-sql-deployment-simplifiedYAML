@@ -4,5 +4,5 @@ variables:
   AdoEnvironment: 'ppe-data'
   DatabaseName: 'db02'
   ServerName: 'sql-gh-simplified-yaml-02.database.windows.net'
- # tenantid 89397abe-df61-48a3-abe3-efc403bca4bd
+
 
