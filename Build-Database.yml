@@ -14,10 +14,6 @@ jobs:
     environment: ${{ variables.AdoEnvironment }}
     strategy:
       runOnce:
-        preDeploy:
-         steps: 
-          - download: current
-            artifact: dacpac-built
         deploy:
           steps:
           - checkout: self
