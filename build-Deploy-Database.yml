@@ -1,6 +1,6 @@
 parameters:
  - name: Environment
-   default: 'test' 
+   default: 'Test' 
 
 name: Pipeline-$(Build.DefinitionName)-$(Date:yyyyMMdd)$(Rev:.r)
 
@@ -24,6 +24,9 @@ stages:
       vmImage: 'windows-latest'
     displayName: Job - Data Build
     dependsOn: []
+    variables:
+      - group: ${{ Parameters.Environment }}-vars
+      - template: .\Variables-${{ Parameters.Environment }}.yml
 
     environment: ${{ variables.AdoEnvironment }}
     strategy:
@@ -53,3 +56,32 @@ stages:
             inputs:
               targetPath: '$(Build.ArtifactStagingDirectory)'
               artifact: 'dacpac-built'
+
+          # - task: AzurePowerShell@5
+          #   displayName: Capture access token for SQL DB from Azure DevOps Service Connection
+          #   inputs:
+          #     azureSubscription: ${{ parameters.ServiceConnection }}
+          #     ScriptType: 'InlineScript'
+          #     azurePowerShellVersion: LatestVersion
+          #     Inline: |
+          #       $context = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile.DefaultContext
+          #       $sqlToken = [Microsoft.Azure.Commands.Common.Authentication.AzureSession]::Instance.AuthenticationFactory.Authenticate($context.Account, $context.Environment, $context.Tenant.Id.ToString(), $null, [Microsoft.Azure.Commands.Common.Authentication.ShowDialog]::Never, $null, "https://database.windows.net").AccessToken
+          #       Write-Host ("##vso[task.setvariable variable=SQLTOKEN;]$sqlToken")  
+          #     errorActionPreference: Continue
+        
+
+          - task: 'SqlAzureDacpacDeployment@1'
+            displayName: 'Deploy SQL Database - ${{ parameters.DatabaseName }}'
+            inputs:
+              azureSubscription: ${{ variables.ServiceConnection }}
+              ServerName: ${{variables.ServerName}}
+              DatabaseName: ${{ variables.DatabaseName }}
+              SqlUsername: 'sqladmin'
+              SqlPassword: $(SqlPassword)
+              #AuthenticationType: 'connectionString'
+              #ConnectionString: 'Data Source=${{ parameters.ServerName }};Initial Catalog=${{ parameters.DatabaseName }};Encrypt=true;Connect Timeout=300'
+              deployType: 'DacpacTask'
+              DeploymentAction: 'Publish'
+              DacpacFile: '$(Pipeline.Workspace)/dacpac-built/DatabaseExample.dacpac'
+              IpDetectionMethod: 'AutoDetect'
+              #additionalArguments: ${{ parameters.AdditionalArguments }} /AccessToken:$(sqlToken) /v:DataFactoryName="ghubvse-test-uks-adf-01"
