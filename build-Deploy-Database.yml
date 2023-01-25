@@ -36,15 +36,15 @@ stages:
             displayName: 'Visual Studio Build sln file '
             inputs:
               vsVersion: 17.0
-              solution: DatabaseForSimpliedYaml/DatabaseForSimpliedYaml.sln
-              #msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+              #solution: DatabaseForSimpliedYaml/DatabaseForSimpliedYaml.sln
+              msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\\"'
               platform: 'any cpu'
               configuration: release
 
           - task: CopyFiles@2
             displayName: 'Copy Files to:  $(Build.ArtifactStagingDirectory)'
             inputs:
-              SourceFolder: '/DatabaseForSimpliedYaml/DatabaseExample/bin/release'
+              SourceFolder: 'DatabaseForSimpliedYaml/DatabaseExample/bin/release'
               Contents: '**.dacpac'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
