@@ -1,5 +1,5 @@
 parameters:
-  Environment
+ - name:  Environment
 
 stages:
 - stage: Stage_${{ parameters.Environment }} 
@@ -23,7 +23,7 @@ stages:
          steps: 
           - download: current
             artifact: dacpac-built     
-            
+
           # - task: AzurePowerShell@5
           #   displayName: Capture access token for SQL DB from Azure DevOps Service Connection
           #   inputs:
