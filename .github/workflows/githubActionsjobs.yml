@@ -1,11 +1,23 @@
-name: Deploy to Azure
+name: Database Deployment
 
 on:
+  workflow_dispatch:
+    inputs:
+       environment:
+        description: 'Environment'
+        type: environment
   push:
     branches:
-      - main
-
-  workflow_dispatch:
+      - feature/*  
+  
+env:
+      SQL_SERVER_NAME: ${{ secrets.SQL_SERVER_NAME }}
+      CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
+      CERT: ${{ secrets.CERT }}
+      WORKING_DIRECTORY: DatabaseForSimpliedYaml
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
 
 jobs:
   build :
@@ -32,3 +44,28 @@ jobs:
         with:
           name:  SQLDB
           path: ${{ github.workspace }}/DatabaseForSimpliedYaml/DatabaseExample/bin/debug/
+
+  deploy: 
+    needs: build
+    environment: sandbox
+    runs-on: windows-latest
+
+    steps:
+      - name: login to az
+        shell: bash
+        run: |
+          echo "$CERT" > spncertificate.pem
+          az login --service-principal -u $CLIENT_ID -p spncertificate.pem --tenant $TENANT_ID
+               
+      - name: download artifact containing dacpac
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: SQLDB
+
+      - name: Azure SQL Deploy
+        uses: Azure/sql-action@v2.1
+        with:
+          connection-string: '${{ secrets.CONNECTION_STRING }}'
+          path: './DatabaseForSimpliedYaml.dacpac'
+          action: publish
+          arguments: '/p:DropObjectsNotInSource=true'
