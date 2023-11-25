@@ -54,8 +54,7 @@ jobs:
       - name: login to az
         shell: bash
         run: |
-          echo "$CERT" > spncertificate.pem
-          az login --service-principal -u $CLIENT_ID -p spncertificate.pem --tenant $TENANT_ID
+          az login --service-principal -u $CLIENT_ID -p $CLIENT_SECRET --tenant $TENANT_ID
                
       - name: download artifact containing dacpac
         uses: actions/download-artifact@v3.0.2
