@@ -49,14 +49,20 @@ jobs:
   get_ip:
     runs-on: ubuntu-latest
     outputs:
-      ip: ${{ steps.get_ip.outputs.ip_address }}
+      ip: ${{ steps.get_ip.outputs.ip }}
     steps:
-      - name: Get GitHub Agent IP
+      - name: 🛒 Checkout
+        uses: actions/checkout@v2
+
+      - name: Get IP Address  
         id: get_ip
-        run: echo "::set-output name=ip_address::$(curl -s https://api.ipify.org)"
+        run: |
+            ip=$(curl -s https://api.ipify.org)
+            echo "::set-output name=ip::$ip"
+
 
   deploy: 
-    needs: [build]
+    needs: [build, get_ip]
     environment: sandbox
     runs-on: windows-latest
 
