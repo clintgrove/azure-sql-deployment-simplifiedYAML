@@ -52,8 +52,9 @@ jobs:
       - name: Get GitHub Agent IP
         id: get_ip
         run: echo "::set-output name=ip_address::$(curl -s https://api.ipify.org)"
+
   deploy: 
-    needs: build
+    needs: [build, get_ip]
     environment: sandbox
     runs-on: windows-latest
 
