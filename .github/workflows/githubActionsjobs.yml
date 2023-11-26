@@ -9,7 +9,7 @@ on:
   push:
     branches:
       - feature/*  
-  
+      - main  
 env:
       SQL_SERVER_NAME: ${{ secrets.SQL_SERVER_NAME }}
       CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
