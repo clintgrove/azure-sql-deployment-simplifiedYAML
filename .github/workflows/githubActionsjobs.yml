@@ -54,8 +54,8 @@ jobs:
       - name: Az Log in
         shell: bash
         run: |
-          az login --service-principal -u $CLIENT_ID -p $CLIENT_SECRET --tenant $TENANT_ID
-          
+          az login --service-principal -u ${{ env.CLIENT_ID }} -p ${{ env.CLIENT_SECRET }} --tenant ${{ env.TENANT_ID }}
+
       - name: download artifact containing dacpac
         uses: actions/download-artifact@v3.0.2
         with:
